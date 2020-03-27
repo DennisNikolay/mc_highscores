@@ -1,0 +1,18 @@
+version: "3.7"
+services:
+  minecraft:
+    image: itzg/minecraft-server
+    ports:
+        - 25565:25565
+    volumes:
+        - ./data:/data
+    environment:
+        TYPE: PAPER
+        EULA: "true"
+  database:
+    build: postgres
+    environment:
+        POSTGRES_PASSWORD: 1234test
+        POSTGRES_USER: minecraft
+    ports:
+        - 42020:5432

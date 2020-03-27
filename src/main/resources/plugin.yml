@@ -1,0 +1,10 @@
+name: highscores
+version: 1.0.0
+author: Dennis Nikolay
+main: com.lamename.mc.App
+api-version: "1.15"
+website: mc.lame-name.com
+commands:
+      highscore:
+               description: Show different highscores
+               usage: /highscore [scoreName] [page]
