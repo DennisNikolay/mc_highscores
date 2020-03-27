@@ -2,6 +2,7 @@ package com.lamename.mc;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.lamename.mc.models.PlayerScore;
 import com.lamename.mc.repositories.PlayerScoreRepository;
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -46,9 +47,30 @@ public class AppIntegrationTest
         assertNotNull(em);
     }
 
-    public void testDatabaseAccessWorks()
+    public void testReadWorks()
     {
+        PlayerScoreRepository psr = injector.getInstance(PlayerScoreRepository.class);
+        PlayerScore ps  = psr.getPlayerScore("Depani");
+        assertEquals(3, ps.getDeathCount());
+    }
 
+    public void testUpdateWorks()
+    {
+        PlayerScoreRepository psr = injector.getInstance(PlayerScoreRepository.class);
+        PlayerScore ps  = psr.getPlayerScore("Depani");
+        assertEquals(3, ps.getDeathCount());
+        ps.incrementDeathCount();
+        //psr.savePlayerScore(ps);
+    }
+
+    public void testCreateWorks()
+    {
+        PlayerScoreRepository psr = injector.getInstance(PlayerScoreRepository.class);
+        PlayerScore ps  = new PlayerScore("Test");
+        ps.incrementDeathCount();
+        psr.savePlayerScore(ps);
+        PlayerScore loadedPs  = psr.getPlayerScore("Test");
+        assertEquals(1, loadedPs.getDeathCount());
     }
 
 }

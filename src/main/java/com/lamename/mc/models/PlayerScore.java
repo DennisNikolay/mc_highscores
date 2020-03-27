@@ -9,6 +9,8 @@ import javax.persistence.Table;
 @Table
 public class PlayerScore {
 
+    public PlayerScore(){};
+
     @Id
     protected String playerListName;
 

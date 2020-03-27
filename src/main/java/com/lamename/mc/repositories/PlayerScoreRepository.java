@@ -9,8 +9,7 @@ public class PlayerScoreRepository implements PlayerScoreRepositoryInterface {
 
     protected EntityManager entityManager;
 
-    @Inject
-    PlayerScoreRepository(EntityManager em){
+    @Inject PlayerScoreRepository(EntityManager em){
         entityManager = em;
     }
 

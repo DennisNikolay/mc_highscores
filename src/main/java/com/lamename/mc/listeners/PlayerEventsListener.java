@@ -1,16 +1,23 @@
 package com.lamename.mc.listeners;
 
 import com.lamename.mc.models.PlayerScore;
+import com.lamename.mc.repositories.PlayerScoreRepository;
 import com.lamename.mc.repositories.PlayerScoreRepositoryInterface;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 import org.bukkit.event.EventHandler;
+
 import javax.inject.Inject;
+
 
 public class PlayerEventsListener implements Listener {
 
-    @Inject protected PlayerScoreRepositoryInterface repo;
+    protected PlayerScoreRepositoryInterface repo;
+
+    @Inject  public PlayerEventsListener(PlayerScoreRepository repo){
+        this.repo = repo;
+    }
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event){

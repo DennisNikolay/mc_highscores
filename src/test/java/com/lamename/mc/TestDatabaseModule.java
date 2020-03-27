@@ -12,7 +12,7 @@ public class TestDatabaseModule extends AbstractModule {
     @Override
     protected void configure() {
         install(new JpaPersistModule("test"));
-        bind(com.lamename.mc.DatabaseModule.JPAInitializer.class).asEagerSingleton();
+        bind(com.lamename.mc.TestDatabaseModule.JPAInitializer.class).asEagerSingleton();
     }
 
     @Singleton

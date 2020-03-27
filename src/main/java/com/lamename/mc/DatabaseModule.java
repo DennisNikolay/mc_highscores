@@ -11,16 +11,18 @@ public class DatabaseModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        install(new JpaPersistModule("develop"));
-        bind(JPAInitializer.class).asEagerSingleton();
+        install(new JpaPersistModule("docker"));
+        bind(com.lamename.mc.DatabaseModule.JPAInitializer.class).asEagerSingleton();
     }
 
     @Singleton
     public static class JPAInitializer {
+
         @Inject
         public JPAInitializer(final PersistService service) {
             service.start();
         }
+
     }
 
 }

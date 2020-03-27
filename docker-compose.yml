@@ -1,7 +1,7 @@
 version: "3.7"
 services:
   minecraft:
-    image: itzg/minecraft-server
+    image: itzg/minecraft-server:adopt11
     ports:
         - 25565:25565
     volumes:
@@ -9,10 +9,12 @@ services:
     environment:
         TYPE: PAPER
         EULA: "true"
+        CLASSPATH: /data/plugins
   database:
     build: postgres
     environment:
-        POSTGRES_PASSWORD: 1234test
-        POSTGRES_USER: minecraft
+        POSTGRES_PASSWORD: postgres
+        POSTGRES_USER: postgres
+        POSTGRES_DB: postgres
     ports:
         - 42020:5432
