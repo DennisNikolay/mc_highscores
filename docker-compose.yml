@@ -10,11 +10,3 @@ services:
         TYPE: PAPER
         EULA: "true"
         CLASSPATH: /data/plugins
-  database:
-    build: postgres
-    environment:
-        POSTGRES_PASSWORD: postgres
-        POSTGRES_USER: postgres
-        POSTGRES_DB: postgres
-    ports:
-        - 42020:5432

@@ -1,17 +1,9 @@
 package com.lamename.mc.models;
 
-
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-@Entity
-@Table
 public class PlayerScore {
 
     public PlayerScore(){};
 
-    @Id
     protected String playerListName;
 
     protected int deathCount;

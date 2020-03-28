@@ -1,26 +1,20 @@
 package com.lamename.mc.repositories;
 
 import com.lamename.mc.models.PlayerScore;
-import com.google.inject.persist.Transactional;
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
 
 public class PlayerScoreRepository implements PlayerScoreRepositoryInterface {
 
-    protected EntityManager entityManager;
 
-    @Inject PlayerScoreRepository(EntityManager em){
-        entityManager = em;
+    PlayerScoreRepository(){
+
     }
 
-    @Transactional
     public PlayerScore getPlayerScore(String playerListName) {
-        return entityManager.find(PlayerScore.class, playerListName);
+        return null;
     }
 
-    @Transactional
     public void savePlayerScore(PlayerScore score) {
-        entityManager.persist(score);
+
     }
 
 }
