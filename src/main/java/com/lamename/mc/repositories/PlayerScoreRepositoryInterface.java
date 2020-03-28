@@ -1,12 +1,12 @@
 package com.lamename.mc.repositories;
 
-import com.google.inject.ImplementedBy;
 import com.lamename.mc.models.PlayerScore;
 
-@ImplementedBy(PlayerScoreRepository.class)
+import java.util.UUID;
+
 public interface PlayerScoreRepositoryInterface {
 
-    PlayerScore getPlayerScore(String playerListName);
+    PlayerScore getPlayerScore(UUID uuid);
 
     void savePlayerScore(PlayerScore score);
 

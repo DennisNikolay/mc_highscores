@@ -9,6 +9,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.EventHandler;
 
 import javax.inject.Inject;
+import java.util.UUID;
 
 
 public class PlayerEventsListener implements Listener {
@@ -21,11 +22,11 @@ public class PlayerEventsListener implements Listener {
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event){
-        String playerName = event.getEntity().getPlayerListName();
-        PlayerScore score = repo.getPlayerScore(playerName.toString());
-        if(score == null){
-            score = new PlayerScore(playerName);
-        }
+        incrementDeathCounter(event.getEntity().getUniqueId());
+    }
+
+    protected void incrementDeathCounter(UUID playerUUid){
+        PlayerScore score = repo.getPlayerScore(playerUUid);
         score.incrementDeathCount();
         repo.savePlayerScore(score);
     }
