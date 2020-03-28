@@ -2,10 +2,8 @@ package com.lamename.mc.factories;
 
 import com.lamename.mc.models.PlayerScore;
 
-public class PlayerScoreFactory {
+public interface PlayerScoreFactory {
 
-    public PlayerScore create(String uuid){
-        return new PlayerScore(uuid);
-    }
+    public PlayerScore create(String uuid);
 
 }
