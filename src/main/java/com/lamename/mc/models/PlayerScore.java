@@ -9,14 +9,14 @@ public class PlayerScore {
     @Id
     protected String uuid;
 
+    protected String playerName;
+
     protected int deathCount;
+
+    protected int fishedItemsCount;
 
     public PlayerScore(){};
 
-    public PlayerScore(String uuid){
-        this.uuid = uuid;
-        deathCount = 0;
-    }
 
     public String getUuid(){
         return uuid;
@@ -32,6 +32,22 @@ public class PlayerScore {
 
     public void incrementDeathCount(){
         deathCount++;
+    }
+
+    public int getFishedItemsCount() {
+        return fishedItemsCount;
+    }
+
+    public void incrementFishedCount(){
+        fishedItemsCount++;
+    }
+
+    public String getPlayerName() {
+        return playerName;
+    }
+
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
     }
 
 }

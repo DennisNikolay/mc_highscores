@@ -4,6 +4,6 @@ import com.lamename.mc.models.PlayerScore;
 
 public interface PlayerScoreFactory {
 
-    public PlayerScore create(String uuid);
+    PlayerScore create(String uuid);
 
 }

@@ -4,7 +4,7 @@ import com.lamename.mc.factories.PlayerScoreFactory;
 import com.lamename.mc.models.PlayerScore;
 import io.jsondb.JsonDBTemplate;
 
-import javax.inject.Inject;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,7 +13,6 @@ public class PlayerScoreRepository implements PlayerScoreRepositoryInterface {
     protected JsonDBTemplate dbTemplate;
     protected PlayerScoreFactory playerScoreFactory;
 
-    @Inject
     public PlayerScoreRepository(JsonDBTemplate dbTemplate, PlayerScoreFactory psFactory){
         this.dbTemplate = dbTemplate;
         playerScoreFactory = psFactory;
@@ -30,6 +29,16 @@ public class PlayerScoreRepository implements PlayerScoreRepositoryInterface {
 
     public void savePlayerScore(PlayerScore score) {
         dbTemplate.upsert(score);
+    }
+
+    @Override
+    public List<PlayerScore> findAll(Comparator<PlayerScore> comp, String slice) {
+        return dbTemplate.findAll(PlayerScore.class, comp, slice);
+    }
+
+    @Override
+    public List<PlayerScore> findAll(Comparator<PlayerScore> comp) {
+        return dbTemplate.findAll(PlayerScore.class, comp);
     }
 
 }

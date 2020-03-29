@@ -2,7 +2,7 @@ package com.lamename.mc;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.lamename.mc.listeners.PlayerEventsListener;
+import com.lamename.mc.listeners.PlayerEventsWrapper;
 import com.lamename.mc.models.PlayerScore;
 import com.lamename.mc.repositories.PlayerScoreRepository;
 import junit.framework.Test;
@@ -56,7 +56,8 @@ public class AppIntegrationTest
 
     public void testCreateAndLoadPlayerScore(){
         UUID randomUuid = UUID.randomUUID();
-        PlayerScore score = new PlayerScore(randomUuid.toString());
+        PlayerScore score = new PlayerScore();
+        score.setUuid(randomUuid.toString());
         score.incrementDeathCount();
         PlayerScoreRepository repo = injector.getInstance(PlayerScoreRepository.class);
         repo.savePlayerScore(score);
@@ -65,7 +66,7 @@ public class AppIntegrationTest
     }
 
     public void testInjectorCanCreatePlayerEventsListener(){
-        assertNotNull(injector.getInstance(PlayerEventsListener.class));
+        assertNotNull(injector.getInstance(PlayerEventsWrapper.class));
     }
 
 }
