@@ -1,5 +1,7 @@
 package com.lamename.mc.models;
 
+import com.google.inject.assistedinject.Assisted;
+import com.google.inject.assistedinject.AssistedInject;
 import io.jsondb.annotation.Document;
 import io.jsondb.annotation.Id;
 
@@ -15,8 +17,12 @@ public class PlayerScore {
 
     protected int fishedItemsCount;
 
-    public PlayerScore(){};
+    public PlayerScore(){}
 
+    @AssistedInject
+    public PlayerScore(@Assisted String uuid){
+        this.uuid = uuid;
+    };
 
     public String getUuid(){
         return uuid;

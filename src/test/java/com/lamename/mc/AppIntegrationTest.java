@@ -56,8 +56,7 @@ public class AppIntegrationTest
 
     public void testCreateAndLoadPlayerScore(){
         UUID randomUuid = UUID.randomUUID();
-        PlayerScore score = new PlayerScore();
-        score.setUuid(randomUuid.toString());
+        PlayerScore score = new PlayerScore(randomUuid.toString());
         score.incrementDeathCount();
         PlayerScoreRepository repo = injector.getInstance(PlayerScoreRepository.class);
         repo.savePlayerScore(score);

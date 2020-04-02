@@ -49,11 +49,6 @@
     </repositories>
     <dependencies>
         <dependency>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <version>3.8.1</version>
-        </dependency>
-        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>3.8.1</version>
@@ -72,6 +67,12 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>org.sonatype.sisu</groupId>
+            <artifactId>sisu-guice</artifactId>
+            <version>4.2.0</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.google.inject.extensions</groupId>
             <artifactId>guice-assistedinject</artifactId>
             <version>4.2.3</version>
@@ -81,7 +82,7 @@
             <artifactId>jsondb-core</artifactId>
             <version>1.0.115</version>
             <scope>system</scope>
-            <systemPath>/home/dennis/minecraft_plugins/highscores/lib/jsondb-core-1.0.115-j8.jar</systemPath>
+            <systemPath>${basedir}/lib/jsondb-core-1.0.115-j8.jar</systemPath>
         </dependency>
         <!-- DEPENDENCIES OF JSONDB -->
         <dependency>
