@@ -1,19 +1,18 @@
 package com.lamename.mc.commands;
 
 import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
 import com.lamename.mc.models.PlayerScore;
 import com.lamename.mc.repositories.PlayerScoreRepositoryInterface;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
 
-public class HighscoreCommandExecutor implements CommandExecutor {
+public class HighscoreCommand{
 
     public static final int ENTRIES_PER_PAGE = 10;
 
@@ -21,25 +20,30 @@ public class HighscoreCommandExecutor implements CommandExecutor {
 
     PlayerScoreRepositoryInterface repo;
 
-    CommandSender commandSender;
+    MessageOutputStream outStream;
     String pageArg;
     String scoreNameArg;
 
-    HashMap<String, String> slicers;
-    HashMap<String, Comparator<PlayerScore>> queries;
+    HashMap<String, String> slicers = new HashMap<String, String>();
+    HashMap<String, Comparator<PlayerScore>> queries = new HashMap<String, Comparator<PlayerScore>>();
 
     @Inject
-    HighscoreCommandExecutor(PlayerScoreRepositoryInterface playerScoreRepo) {
+    public HighscoreCommand(@Assisted MessageOutputStream outStream, @Assisted String[] args, PlayerScoreRepositoryInterface playerScoreRepo) {
+        this.outStream = outStream;
         repo = playerScoreRepo;
-    }
-
-    @Override
-    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
-        this.commandSender = commandSender;
-        if (args.length > 0)
-            pageArg = args[0];
+        if(args.length == 0){
+            scoreNameArg = "*";
+            pageArg = "1";
+        }
+        if (args.length > 0){
+            scoreNameArg = args[0];
+            pageArg = "1";
+        }
         if (args.length > 1)
             pageArg = args[1];
+    }
+
+    public boolean execute(){
         printHighscores();
         return !queries.isEmpty();
     }
@@ -50,7 +54,7 @@ public class HighscoreCommandExecutor implements CommandExecutor {
             return;
         for (Map.Entry<String, Comparator<PlayerScore>> entry : queries.entrySet()) {
             String highscoreName = entry.getKey();
-            PlayerScore[] rowsToPrint = (PlayerScore[]) repo.findAll(entry.getValue(), slicers.get(entry.getKey())).toArray();
+            List<PlayerScore> rowsToPrint = repo.findAll(entry.getValue(), slicers.get(entry.getKey()));
             switch (highscoreName) {
                 case "death":
                     printDeathScore(rowsToPrint);
@@ -66,32 +70,32 @@ public class HighscoreCommandExecutor implements CommandExecutor {
         }
     }
 
-    protected void printDeathScore(PlayerScore[] rowsToPrint) {
-        commandSender.sendMessage("");
-        commandSender.sendMessage("XxXpRoGamErXxX (least deaths):");
-        commandSender.sendMessage(HIGHSCORE_DIVIDER);
-        commandSender.sendMessage("");
-        for (int i = 0; i < ENTRIES_PER_PAGE && i < rowsToPrint.length; i++) {
-            commandSender.sendMessage(String.format("%d. %s - %d deaths", i, rowsToPrint[i].getPlayerName(), rowsToPrint[i].getDeathCount()));
+    protected void printDeathScore(List<PlayerScore> rowsToPrint) {
+        outStream.sendMessage("");
+        outStream.sendMessage("XxXpRoGamErXxX (least deaths):");
+        outStream.sendMessage(HIGHSCORE_DIVIDER);
+        outStream.sendMessage("");
+        for (int i = 0; i < ENTRIES_PER_PAGE && i < rowsToPrint.size(); i++) {
+            outStream.sendMessage(String.format("%d. %s - %d deaths", i+1, rowsToPrint.get(i).getPlayerName(), rowsToPrint.get(i).getDeathCount()));
         }
-        commandSender.sendMessage(HIGHSCORE_DIVIDER);
+        outStream.sendMessage(HIGHSCORE_DIVIDER);
     }
 
-    protected void printFishScore(PlayerScore[] rowsToPrint){
-        commandSender.sendMessage("");
-        commandSender.sendMessage("King of the iron rod (most items fished):");
-        commandSender.sendMessage(HIGHSCORE_DIVIDER);
-        commandSender.sendMessage("");
-        for (int i = 0; i < ENTRIES_PER_PAGE && i < rowsToPrint.length; i++) {
-            commandSender.sendMessage(String.format("%d. %s - %d items fished", i, rowsToPrint[i].getPlayerName(), rowsToPrint[i].getFishedItemsCount()));
+    protected void printFishScore(List<PlayerScore> rowsToPrint){
+        outStream.sendMessage("");
+        outStream.sendMessage("King of the iron rod (most items fished):");
+        outStream.sendMessage(HIGHSCORE_DIVIDER);
+        outStream.sendMessage("");
+        for (int i = 0; i < ENTRIES_PER_PAGE && i < rowsToPrint.size(); i++) {
+            outStream.sendMessage(String.format("%d. %s - %d items fished", i, rowsToPrint.get(i).getPlayerName(), rowsToPrint.get(i).getFishedItemsCount()));
         }
-        commandSender.sendMessage(HIGHSCORE_DIVIDER);
+        outStream.sendMessage(HIGHSCORE_DIVIDER);
     }
 
     protected void buildQueriesAndSlicers() {
         buildQueries();
         if (pageArg.equals("me")) {
-            buildMeSlicer((Player) commandSender);
+            buildMeSlicer((Player) outStream);
         } else {
             for (String key : queries.keySet())
                 buildPageSlicer(key, pageArg);
@@ -111,7 +115,7 @@ public class HighscoreCommandExecutor implements CommandExecutor {
                 buildFishedQuery();
                 break;
             default:
-                commandSender.sendMessage("Unknown ranking, only death, fish or * are valid");
+                outStream.sendMessage("Unknown ranking, only death, fish or * are valid");
                 break;
         }
     }
@@ -125,8 +129,8 @@ public class HighscoreCommandExecutor implements CommandExecutor {
     }
 
     protected void buildMeSlicer(Player player) {
-        if (!(commandSender instanceof Player)) {
-            commandSender.sendMessage("Only players can use 'me' as page reference.");
+        if (!(outStream instanceof Player)) {
+            outStream.sendMessage("Only players can use 'me' as page reference.");
             return;
         }
         for (Map.Entry<String, Comparator<PlayerScore>> query : queries.entrySet()) {
@@ -150,7 +154,7 @@ public class HighscoreCommandExecutor implements CommandExecutor {
             if (pageNr <= 0) throw new NumberFormatException();
             slicers.put(queryKey, String.format("%d:%d", (pageNr - 1) * ENTRIES_PER_PAGE, pageNr * ENTRIES_PER_PAGE));
         } catch (NumberFormatException e) {
-            commandSender.sendMessage("Only numbers (greater 0) or 'me' are valid pages.");
+            outStream.sendMessage("Only numbers (greater 0) or 'me' are valid pages.");
         }
     }
 

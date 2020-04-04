@@ -4,6 +4,7 @@ import com.google.inject.assistedinject.Assisted;
 import com.google.inject.assistedinject.AssistedInject;
 import io.jsondb.annotation.Document;
 import io.jsondb.annotation.Id;
+import org.bukkit.entity.Player;
 
 @Document(collection = "player_score", schemaVersion= "1.0")
 public class PlayerScore {
@@ -20,8 +21,9 @@ public class PlayerScore {
     public PlayerScore(){}
 
     @AssistedInject
-    public PlayerScore(@Assisted String uuid){
-        this.uuid = uuid;
+    public PlayerScore(@Assisted Player player){
+        this.uuid = player.getUniqueId().toString();
+        this.playerName = player.getPlayerListName();
     };
 
     public String getUuid(){

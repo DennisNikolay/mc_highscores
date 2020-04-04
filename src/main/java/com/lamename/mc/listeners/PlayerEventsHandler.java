@@ -15,20 +15,20 @@ public class PlayerEventsHandler implements PlayerEventsHandlerInterface {
     }
 
     public void incrementDeathCounter(Player player){
-        PlayerScore score = repo.getPlayerScore(player.getUniqueId());
+        PlayerScore score = repo.getPlayerScore(player);
         score.incrementDeathCount();
         repo.savePlayerScore(score);
     }
 
     public void createNewEntryInScores(Player player){
-        if(!player.hasPlayedBefore()) {
-            PlayerScore newScore = repo.getPlayerScore(player.getUniqueId());
+        if(!repo.exists(player.getUniqueId())) {
+            PlayerScore newScore = repo.getPlayerScore(player);
             repo.savePlayerScore(newScore);
         }
     }
 
     public void incrementFishedCounter(Player player){
-        PlayerScore score = repo.getPlayerScore(player.getUniqueId());
+        PlayerScore score = repo.getPlayerScore(player);
         score.incrementFishedCount();
         repo.savePlayerScore(score);
     }
